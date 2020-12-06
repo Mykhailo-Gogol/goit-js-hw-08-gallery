@@ -4,6 +4,7 @@ let imageList = document.querySelector(".js-gallery");
 let openModal = document.querySelector(".lightbox");
 let closeModal = document.querySelector("[data-action]");
 let modalImg = document.querySelector(".lightbox__image");
+let modalBackdrop = document.querySelector(".lightbox__overlay");
 
 images.forEach(({ preview, original, description }) => {
   let elem = document.createElement("li");
@@ -24,6 +25,7 @@ images.forEach(({ preview, original, description }) => {
 
 function onOpenModal(e) {
   e.preventDefault();
+
   let targetItems = document.querySelectorAll(".gallery__image");
 
   for (let targetItem of targetItems) {
@@ -41,5 +43,21 @@ function onCloseModal() {
   modalImg.setAttribute("src", "");
 }
 
+function onBackdropClicClose(e) {
+  if (e.target === modalBackdrop) {
+    openModal.classList.remove("is-open");
+    modalImg.setAttribute("src", "");
+  }
+}
+
+function onPressEscapeButtonClose(e) {
+  if (e.keyCode === 27) {
+    openModal.classList.remove("is-open");
+    modalImg.setAttribute("src", "");
+  }
+}
+
 imageList.addEventListener("click", onOpenModal);
 closeModal.addEventListener("click", onCloseModal);
+modalBackdrop.addEventListener("click", onBackdropClicClose);
+window.addEventListener("keydown", onPressEscapeButtonClose);
