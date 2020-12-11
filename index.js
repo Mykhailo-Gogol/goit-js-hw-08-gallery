@@ -1,10 +1,10 @@
 import images from "./gallery-items.js";
 
-let imageList = document.querySelector(".js-gallery");
-let openModal = document.querySelector(".lightbox");
-let closeModal = document.querySelector("[data-action]");
-let modalImg = document.querySelector(".lightbox__image");
-let modalBackdrop = document.querySelector(".lightbox__overlay");
+const imageList = document.querySelector(".js-gallery");
+const openModal = document.querySelector(".lightbox");
+const closeModal = document.querySelector("[data-action]");
+const modalImg = document.querySelector(".lightbox__image");
+const modalBackdrop = document.querySelector(".lightbox__overlay");
 
 images.forEach(({ preview, original, description }, index) => {
   let elem = document.createElement("li");
@@ -26,26 +26,29 @@ images.forEach(({ preview, original, description }, index) => {
   imageList.appendChild(elem);
 });
 
-function onOpenModal(e) {
-  e.preventDefault();
+imageList.addEventListener("click", onOpenModal);
+closeModal.addEventListener("click", onCloseModal);
+modalBackdrop.addEventListener("click", onBackdropClicClose);
 
-  let targetItems = document.querySelectorAll(".gallery__image");
+function onOpenModal(element) {
+  element.preventDefault();
+
+  const targetItems = document.querySelectorAll(".gallery__image");
 
   openModal.setAttribute("data-open", true);
 
   console.log(" :>> ", openModal.dataset.open);
 
   for (let targetItem of targetItems) {
-    if (e.target === targetItem) {
+    if (element.target === targetItem) {
       openModal.classList.add("is-open");
-      let currentImageLink = e.target.dataset.source;
-      //console.log("object :>> ", currentImageLink);
+      const currentImageLink = element.target.dataset.source;
+
       modalImg.setAttribute("src", currentImageLink);
     }
   }
 
   window.addEventListener("keydown", onPressEscapeButtonClose);
-  window.addEventListener("keydown", onArrowButtonsClick);
 }
 
 function onCloseModal() {
@@ -55,37 +58,31 @@ function onCloseModal() {
   console.log(" :>> ", openModal.dataset.open);
 
   window.removeEventListener("keydown", onPressEscapeButtonClose);
-  window.removeEventListener("keydown", onArrowButtonsClick);
 }
 
-function onBackdropClicClose(e) {
-  if (e.target === modalBackdrop) {
+function onBackdropClicClose(element) {
+  if (element.target === modalBackdrop) {
     openModal.classList.remove("is-open");
     modalImg.setAttribute("src", "");
     openModal.setAttribute("data-open", false);
     console.log(" :>> ", openModal.dataset.open);
 
     window.removeEventListener("keydown", onPressEscapeButtonClose);
-    window.removeEventListener("keydown", onArrowButtonsClick);
   }
 }
 
-function onPressEscapeButtonClose(e) {
-  if (e.keyCode === 27) {
+function onPressEscapeButtonClose(element) {
+  if (element.keyCode === 27) {
     openModal.classList.remove("is-open");
     modalImg.setAttribute("src", "");
     openModal.setAttribute("data-open", false);
     console.log(" :>> ", openModal.dataset.open);
 
     window.removeEventListener("keydown", onPressEscapeButtonClose);
-    window.removeEventListener("keydown", onArrowButtonsClick);
   }
 }
 
-function onArrowButtonsClick(e) {
-  console.log();
-}
-
-imageList.addEventListener("click", onOpenModal);
-closeModal.addEventListener("click", onCloseModal);
-modalBackdrop.addEventListener("click", onBackdropClicClose);
+/*
+ * REFACTORING: Замінив let на const
+ * REFACTORING: Замінив for на функциональний метод forEach
+ */
