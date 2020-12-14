@@ -6,25 +6,29 @@ const closeModal = document.querySelector("[data-action]");
 const modalImg = document.querySelector(".lightbox__image");
 const modalBackdrop = document.querySelector(".lightbox__overlay");
 
-images.forEach(({ preview, original, description }, index) => {
-  let elem = document.createElement("li");
-  let link = document.createElement("a");
-  let img = document.createElement("img");
+const imageElements = images.map(
+  ({ preview, original, description }, index) => {
+    let elem = document.createElement("li");
+    let link = document.createElement("a");
+    let img = document.createElement("img");
 
-  elem.classList.add("gallery__item");
-  elem.setAttribute("data-item", index);
-  link.classList.add("gallery__link");
-  link.setAttribute("data-link", index);
-  link.href = original;
-  img.classList.add("gallery__image");
-  img.setAttribute("data-image", index);
-  img.src = preview;
-  img.setAttribute("data-source", original);
-  img.alt = description;
-  link.append(img);
-  elem.append(link);
-  imageList.appendChild(elem);
-});
+    elem.classList.add("gallery__item");
+    elem.setAttribute("data-item", index);
+    link.classList.add("gallery__link");
+    link.setAttribute("data-link", index);
+    link.href = original;
+    img.classList.add("gallery__image");
+    img.setAttribute("data-image", index);
+    img.src = preview;
+    img.setAttribute("data-source", original);
+    img.alt = description;
+    link.append(img);
+    elem.append(link);
+    return elem;
+  }
+);
+
+imageList.append(...imageElements);
 
 imageList.addEventListener("click", onOpenModal);
 closeModal.addEventListener("click", onCloseModal);
@@ -84,5 +88,7 @@ function onPressEscapeButtonClose(element) {
 
 /*
  * REFACTORING: Замінив let на const
- * REFACTORING: Замінив for на функциональний метод forEach
+ * REFACTORING: Замінив for на функциональний метод map
+ * Виористав деструктуризацію
+ * Використав спред оператор
  */
