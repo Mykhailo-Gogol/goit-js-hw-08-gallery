@@ -13,12 +13,9 @@ const imageElements = images.map(
     let img = document.createElement("img");
 
     elem.classList.add("gallery__item");
-    elem.setAttribute("data-item", index);
     link.classList.add("gallery__link");
-    link.setAttribute("data-link", index);
     link.href = original;
     img.classList.add("gallery__image");
-    img.setAttribute("data-image", index);
     img.src = preview;
     img.setAttribute("data-source", original);
     img.alt = description;
@@ -53,6 +50,8 @@ function onOpenModal(element) {
   }
 
   window.addEventListener("keydown", onPressEscapeButtonClose);
+  window.addEventListener("keydown", onRigthButtonClick);
+  window.addEventListener("keydown", onLeftButtonClick);
 }
 
 function onCloseModal() {
@@ -62,6 +61,8 @@ function onCloseModal() {
   console.log(" :>> ", openModal.dataset.open);
 
   window.removeEventListener("keydown", onPressEscapeButtonClose);
+  window.removeEventListener("keydown", onRigthButtonClick);
+  window.removeEventListener("keydown", onLeftButtonClick);
 }
 
 function onBackdropClicClose(element) {
@@ -72,6 +73,8 @@ function onBackdropClicClose(element) {
     console.log(" :>> ", openModal.dataset.open);
 
     window.removeEventListener("keydown", onPressEscapeButtonClose);
+    window.removeEventListener("keydown", onRigthButtonClick);
+    window.removeEventListener("keydown", onLeftButtonClick);
   }
 }
 
@@ -83,6 +86,52 @@ function onPressEscapeButtonClose(element) {
     console.log(" :>> ", openModal.dataset.open);
 
     window.removeEventListener("keydown", onPressEscapeButtonClose);
+    window.removeEventListener("keydown", onRigthButtonClick);
+    window.removeEventListener("keydown", onLeftButtonClick);
+  }
+}
+
+function onRigthButtonClick(action) {
+  const modalImage = document.querySelector(".lightbox__image");
+  let imagesArray = [];
+  images.forEach(({ original }) => {
+    imagesArray.push(original);
+  });
+
+  if (action.keyCode === 39) {
+    for (let i = 0; i < imagesArray.length - 1; i++) {
+      let nextSrc = imagesArray[i + 1];
+      let currentSrc = imagesArray[i];
+
+      if (imagesArray[i] === modalImage.src) {
+        modalImage.src = nextSrc;
+        break;
+      } else if (imagesArray[8] === modalImage.src) {
+        modalImage.src = currentSrc;
+        break;
+      }
+    }
+  }
+}
+
+function onLeftButtonClick(action) {
+  const modalImage = document.querySelector(".lightbox__image");
+  let imagesArray = [];
+  images.forEach(({ original }) => {
+    imagesArray.push(original);
+  });
+  if (action.keyCode === 37) {
+    for (let i = 0; i < imagesArray.length - 1; i++) {
+      let previousSrc = imagesArray[i - 1];
+      let currentSrc = imagesArray[i];
+      if (imagesArray[i] === modalImage.src && i !== 0) {
+        modalImage.src = previousSrc;
+        break;
+      } else if (imagesArray[0] === modalImage.src) {
+        modalImage.src = currentSrc;
+        break;
+      }
+    }
   }
 }
 
