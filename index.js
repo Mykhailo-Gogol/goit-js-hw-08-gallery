@@ -8,15 +8,16 @@ const modalBackdrop = document.querySelector(".lightbox__overlay");
 
 const imageElements = images.map(
   ({ preview, original, description }, index) => {
-    let elem = document.createElement("li");
-    let link = document.createElement("a");
-    let img = document.createElement("img");
+    const elem = document.createElement("li");
+    const link = document.createElement("a");
+    const img = document.createElement("img");
 
     elem.classList.add("gallery__item");
     link.classList.add("gallery__link");
     link.href = original;
     img.classList.add("gallery__image");
     img.src = preview;
+    img.setAttribute("data-index", index);
     img.setAttribute("data-source", original);
     img.alt = description;
     link.append(img);
@@ -38,14 +39,14 @@ function onOpenModal(element) {
 
   openModal.setAttribute("data-open", true);
 
-  console.log(" :>> ", openModal.dataset.open);
-
-  for (let targetItem of targetItems) {
+  for (const targetItem of targetItems) {
     if (element.target === targetItem) {
       openModal.classList.add("is-open");
       const currentImageLink = element.target.dataset.source;
+      const currentImageDescription = element.target.alt;
 
       modalImg.setAttribute("src", currentImageLink);
+      modalImg.setAttribute("alt", currentImageDescription);
     }
   }
 
@@ -58,7 +59,6 @@ function onCloseModal() {
   openModal.classList.remove("is-open");
   modalImg.setAttribute("src", "");
   openModal.setAttribute("data-open", false);
-  console.log(" :>> ", openModal.dataset.open);
 
   window.removeEventListener("keydown", onPressEscapeButtonClose);
   window.removeEventListener("keydown", onRigthButtonClick);
@@ -70,7 +70,6 @@ function onBackdropClicClose(element) {
     openModal.classList.remove("is-open");
     modalImg.setAttribute("src", "");
     openModal.setAttribute("data-open", false);
-    console.log(" :>> ", openModal.dataset.open);
 
     window.removeEventListener("keydown", onPressEscapeButtonClose);
     window.removeEventListener("keydown", onRigthButtonClick);
@@ -83,7 +82,6 @@ function onPressEscapeButtonClose(element) {
     openModal.classList.remove("is-open");
     modalImg.setAttribute("src", "");
     openModal.setAttribute("data-open", false);
-    console.log(" :>> ", openModal.dataset.open);
 
     window.removeEventListener("keydown", onPressEscapeButtonClose);
     window.removeEventListener("keydown", onRigthButtonClick);
@@ -93,7 +91,7 @@ function onPressEscapeButtonClose(element) {
 
 function onRigthButtonClick(action) {
   const modalImage = document.querySelector(".lightbox__image");
-  let imagesArray = [];
+  const imagesArray = [];
   images.forEach(({ original }) => {
     imagesArray.push(original);
   });
@@ -116,7 +114,7 @@ function onRigthButtonClick(action) {
 
 function onLeftButtonClick(action) {
   const modalImage = document.querySelector(".lightbox__image");
-  let imagesArray = [];
+  const imagesArray = [];
   images.forEach(({ original }) => {
     imagesArray.push(original);
   });
@@ -137,7 +135,5 @@ function onLeftButtonClick(action) {
 
 /*
  * REFACTORING: Замінив let на const
- * REFACTORING: Замінив for на функциональний метод map
- * Виористав деструктуризацію
- * Використав спред оператор
+ * REFACTORING: Використав спред оператор
  */
